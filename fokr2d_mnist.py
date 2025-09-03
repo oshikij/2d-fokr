@@ -14,16 +14,14 @@ Model:
   * beta(X, z) is predicted from one-hot labels X; optional latent z with reparameterization
   * mu(t) is a learnable intercept per pixel (optional)
 
-What's new vs the basic version:
-  - Beta network can be an MLP ("mlp") or a small ConvTranspose2d decoder ("deconv"),
-    which outputs a (grid x grid) map that is flattened to beta (length d = grid^2).
-  - Optional reparameterization trick: z ~ N(mu(X), diag(sigma^2(X))),
-    concatenated to X before the Beta network. Adds KL term to the loss.
-
 This file provides:
   - FOKR2D module with beta_arch={'mlp','deconv'} and reparam options
   - Training utilities (MNIST and synthetic)
   - Self-tests (synthetic) without internet
+
+References:
+  Iwayama et al., "Functional Output Regression for Machine Learning in Materials Science",
+  J. Chem. Inf. Model. 2022.
 
 """
 
@@ -205,7 +203,7 @@ class BetaNetDeconv(nn.Module):
             nn.ConvTranspose2d(self.C0, self.C1, kernel_size=3, stride=up_stride, padding=1, output_padding=out_pad, bias=False),
             nn.BatchNorm2d(self.C1),
             nn.LeakyReLU(0.2, inplace=True),
-            nn.Conv2d(self.C1, 1, kernel_size=1, padding=0, bias=True),
+            nn.ConvTranspose2d(self.C1, 1, kernel_size=1, stride=1,padding=0, bias=True),
         )
 
     def forward(self, x: torch.Tensor) -> torch.Tensor:
