@@ -22,3 +22,28 @@ $$Y(\mathbf{x}, t) = \sum_{i=1}^{d} \beta_i(\mathbf{x}, \mathbf{z}) \cdot \Phi_i
 * $\Phi(t)$ (RBFGrid2D): A fixed dictionary of basis functions (kernels) defined over the 2D image coordinates $t \in [0, 1]^2$.
 
 * $\beta(\mathbf{x}, \mathbf{z})$ (BetaNetDeconv): The input-dependent coefficients. $\mathbf{x}$ is the one-hot label, and $\mathbf{z}$ is the latent vector. Implemented using a Deconvolutional Decoder (BetaNetDeconv) to map the dense input back to a spatial grid ($\text{grid} \times \text{grid}$) matching the number of RBF centers.
+* $\mathbf{z}$ (LatentReparam): A sampled latent vector $\mathbf{z}$ obtained via the Reparameterization Trick from a conditional Gaussian distribution $P(\mathbf{z} | \mathbf{x})$, enabling the model to learn a diverse manifold for each digit.
+
+## Results (Generated Samples)
+
+## Technical Stack & Features
+* Framework: PyTorch
+* Code Structure: Modular implementation with nn.Module for RBF Features, Reparameterization, and Beta Network.
+* Loss Function: MSE Loss + KL Divergence (for VAE-like training) + TV-L2 Regularization (for smoothing the mean field $\mu(t)$).
+* Reproducibility: Command Line Interface (argparse) and TrainConfig dataclass for easy replication of experiments.
+
+## Installation and Execution
+```bash
+git clone [https://github.com/oshikij/2d-fokr.git](https://github.com/oshikij/2d-fokr.git)
+cd 2d-fokr
+
+# Install dependencies (requires torchvision for MNIST)
+pip install -r requirements.txt 
+
+# Run the training script (downloads MNIST data automatically)
+python fokr2d_mnist.py --epochs 100 --latent_dim 8 --grid 14
+```
+
+
+## Author
+Jun Oshiki
