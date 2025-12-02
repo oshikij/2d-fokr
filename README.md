@@ -19,3 +19,6 @@ The core FOKR formulation is used to predict the image surface $Y(x, t)$ by line
 ### Core Equation
 $$Y(\mathbf{x}, t) = \sum_{i=1}^{d} \beta_i(\mathbf{x}, \mathbf{z}) \cdot \Phi_i(t) + \mu(t)$$
 
+* $\Phi(t)$ (RBFGrid2D): A fixed dictionary of basis functions (kernels) defined over the 2D image coordinates $t \in [0, 1]^2$.
+
+* $\beta(\mathbf{x}, \mathbf{z})$ (BetaNetDeconv): The input-dependent coefficients. $\mathbf{x}$ is the one-hot label, and $\mathbf{z}$ is the latent vector. Implemented using a Deconvolutional Decoder (BetaNetDeconv) to map the dense input back to a spatial grid ($\text{grid} \times \text{grid}$) matching the number of RBF centers.
